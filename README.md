@@ -1,83 +1,19 @@
-# Ergon Hackathon 2026 – QueryVault
+[README.md](https://github.com/user-attachments/files/26166761/README.md)
+QueryVault is a Salesforce internal productivity tool designed for Admins, Developers, and QA Engineers. It provides a centralized, secure repository for storing, sharing, and validating frequently used SOQL queries, eliminating the need for hardcoding, local text files, or "sticky note" code snippets.
 
-Welcome to the QueryVault hackathon starter repository.
 
-This repository contains the baseline structure for the Ergon Hackathon 2026 challenge. Your team is responsible for implementing the solution described in the official challenge document.
 
-Click [here](https://scribehow.com/viewer/Open_Agentforce_Vibes_IDE__fUjVOEdJTXajQBSSVDUrxg) to learn how to open Agentforce Vibes and begin working!
+The application is built on a custom object: Useful\_Query\_\_c, also standardly known as Useful Query.
 
----
 
-## 📘 Challenge Overview
 
-The full problem statement is located at:
+The application gives internal users the ability to create, read, edit, and delete query records and easily reference them at a later time.
 
-- `docs/CHALLENGE.md`
 
-The official Word document (source of truth) is linked at the top of that file.
 
-You are expected to design and implement the solution according to the requirements outlined there.
+The architecture of the QueryVault application is made in a metadata-driven design. At its core, the system utilizes Dynamic Schema Discovery via Schema.getGlobalDescribe() to populate the SObjectApiName\_\_c field, ensuring the app remains environment-agnostic by identifying all standard and custom objects within the entire Salesforce org. Therefore, there is no hardcoded limitations within the tool. When a user submits a query for validation, the Apex controller validates the input and programmatically appends a LIMIT clause. This injection ensures that the database engine only performs a syntax and accessibility check on a single row, effectively preventing long running queries from crippling servers.
 
----
 
-## 🚀 Getting Started
 
-1. Open your assigned Hackathon sandbox.
-2. Deploy or sync this project using the IDE’s built-in deployment tools.
-3. Open the Hackathon application from the App Launcher.
-4. Confirm the base components load successfully.
-
-If you are unfamiliar with deploying metadata in Salesforce, review the resources in `docs/RESOURCES.md`.
-
----
-
-## 📚 Learning Resources
-
-If you are new to Salesforce development, start here:
-
-- `docs/RESOURCES.md`
-
-This file contains curated platform documentation and ramp-up materials.
-
----
-
-## 📊 Seed Data
-
-The sample data used to populate the `UsefulQuery__c` object can be found here:
-
-[UsefulQuery Seed Data (Excel)](https://ergonus.sharepoint.com/:x:/s/ErgonsSalesForceSite/IQB_fsP0NFekRq4WVwMQmSu9ARY6XH6_gpQ3rzt2c-2PwKg?e=sL2dP6&wdExp=TEAMS-TREATMENT&web=1)
-
-You may use this file to manually create records, import via Salesforce Inspector, or load using Data Loader.
-
----
-
-## 📦 Submission Expectations
-
-At minimum, your completed solution must include:
-
-- Custom object and required fields
-- LWC library and editor
-- SOQL validation with safety guardrails
-- Full CRUD functionality
-- Permission-based access control
-- Seed data
-- A minimal “How to Use” guide
-
-Refer to `docs/CHALLENGE.md` for full evaluation criteria.
-
----
-
-## 🧠 Expectations
-
-This challenge assumes general programming experience but not prior Salesforce experience.
-
-Strong solutions will demonstrate:
-
-- Thoughtful architecture
-- Security awareness
-- Performance considerations
-- Clean UX design
-- Clear documentation
-
-Build something you would be proud to ship internally.
+Security within the application follows the Principle of Least Privilege and is enforced at multiple layers of the Salesforce stack. All Apex controllers are defined using the with sharing keyword to strictly respect the Org-Wide Defaults (OWD), which are set to Private to ensure data isolation. Access is then selectively granted through granular Permission Sets—QueryVault\_Editor for full administrative control and QueryVault\_Viewer for read-only interactions—rather than modifying broad user profiles. On the front end, the Lightning Web Components (LWC) utilize Lightning Data Service (LDS) to provide a reactive, secure, and seamless user experience. By combining these technical strategies, QueryVault provides a professional-grade tool that will allow developers to work quicker and more effectively.
 
